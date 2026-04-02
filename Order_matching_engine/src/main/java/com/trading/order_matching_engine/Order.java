@@ -2,6 +2,8 @@ package com.trading.order_matching_engine;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Orders")
 public class Order {
@@ -20,8 +22,13 @@ public class Order {
     private Integer quantity;
 
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String status;
+    private String status = "OPEN";
 
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    public static enum OrderType{
+        BUY, SELL
+    }
 }
