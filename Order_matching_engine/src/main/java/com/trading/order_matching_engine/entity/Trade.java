@@ -1,4 +1,4 @@
-package com.trading.order_matching_engine;
+package com.trading.order_matching_engine.entity;
 
 import jakarta.persistence.*;
 
