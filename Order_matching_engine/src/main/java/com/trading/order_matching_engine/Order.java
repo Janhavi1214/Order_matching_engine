@@ -12,8 +12,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String type;
+    private OrderType type;
 
     @Column(nullable = false)
     private Double price;
@@ -21,14 +22,16 @@ public class Order {
     @Column(nullable = false)
     private Integer quantity;
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String status = "OPEN";
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.OPEN;
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Enumerated(EnumType.STRING)
     public static enum OrderType{
         BUY, SELL
+    }
+
+    public static enum OrderStatus{
+        OPEN, PARTIALLY_FILLED, FILLED
     }
 }
