@@ -16,6 +16,29 @@ public class Order {
     @Column(nullable = false)
     private OrderType type;
 
+    @Column(nullable = false)
+    private Double price;
+
+    @Column(nullable = false)
+    private Integer quantity;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.OPEN;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public static enum OrderType{
+        BUY, SELL
+    }
+
+    public static enum OrderStatus{
+        OPEN, PARTIALLY_FILLED, FILLED
+    }
+
     public Long getId() {
         return id;
     }
@@ -58,28 +81,5 @@ public class Order {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    @Column(nullable = false)
-    private Double price;
-
-    @Column(nullable = false)
-    private Integer quantity;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status = OrderStatus.OPEN;
-
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public static enum OrderType{
-        BUY, SELL
-    }
-
-    public static enum OrderStatus{
-        OPEN, PARTIALLY_FILLED, FILLED
     }
 }

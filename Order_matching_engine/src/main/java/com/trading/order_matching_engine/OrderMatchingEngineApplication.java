@@ -12,3 +12,7 @@ public class OrderMatchingEngineApplication {
     }
 
 }
+
+// buyer's price >= seller's price
+//buyer's price = he can buy at that max price
+// seller's price = he can sell at min that price

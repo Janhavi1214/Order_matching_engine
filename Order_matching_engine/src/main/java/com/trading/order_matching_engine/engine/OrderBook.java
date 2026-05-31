@@ -1,10 +1,12 @@
 package com.trading.order_matching_engine.engine;
 
 import com.trading.order_matching_engine.entity.Order;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.PriorityQueue;
 
+@Component
 public class OrderBook {
 
     PriorityQueue<Order> buyOrder = new PriorityQueue<>((a,b) -> Double.compare(b.getPrice(), a.getPrice()));
