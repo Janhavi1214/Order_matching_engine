@@ -35,4 +35,12 @@ public class OrderService {
         return matchingEngine.match();
 
     }
+
+    public List<Order> getAllOrders(){
+        return orderRepository.findAll();
+    }
+
+    public List<Trade> getAllTrades(){
+        return tradeRepository.findAll();
+    }
 }
