@@ -68,6 +68,11 @@ public class MatchingEngine {
                     matchedSell.setStatus(Order.OrderStatus.PARTIALLY_FILLED);
                     orderBook.addOrder(matchedSell);
                 }
+
+                tradeRepo.save(trade);
+                orderRepo.save(matchedBuy);
+                orderRepo.save(matchedSell);
+                executedTrades.add(trade);
             }
         }
 
