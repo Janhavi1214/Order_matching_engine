@@ -1,20 +1,20 @@
-# Order Matching Engine
+# 📈 Order Matching Engine
 
 A stock exchange order matching backend that simulates real-time trade execution using the **Price-Time Priority** algorithm. Built with Spring Boot, MySQL, and Java PriorityQueues.
 
-## Overview
+## 🎯 Overview
 
 This system replicates the core logic of exchanges like NASDAQ and NSE — it accepts BUY/SELL limit orders via REST APIs, maintains an order book using dual heaps, automatically matches orders when prices cross, and executes trades atomically.
 
 **Key Features:**
-- Real-time order matching with price-time priority
-- Partial order filling with state management
-- Dual-heap architecture for O(1) best-price lookup
-- RESTful APIs with request validation
-- Persistent trade execution records
-- Structured exception handling
+- ⚡ Real-time order matching with price-time priority
+- 📊 Partial order filling with state management
+- 🔥 Dual-heap architecture for O(1) best-price lookup
+- 🛡️ RESTful APIs with request validation
+- 💾 Persistent trade execution records
+- 🚨 Structured exception handling
 
-## Architecture
+## 🏗️ Architecture
 
 ```
 ┌─────────────┐
@@ -59,32 +59,32 @@ This system replicates the core logic of exchanges like NASDAQ and NSE — it ac
 └────────────────────┘
 ```
 
-## The Matching Algorithm
+## 🔄 The Matching Algorithm
 
-### Core Concept: Price-Time Priority
+### 💡 Core Concept: Price-Time Priority
 
 Orders are matched when: **bestBuyPrice ≥ bestSellPrice**
 
 **Example:**
 ```
 BUY Orders              SELL Orders
-₹105 (10 shares)        ₹98 (5 shares)   ← Best Sell
+₹105 (10 shares)        ₹98 (5 shares)   ← Best Sell 🎯
 ₹103 (5 shares)         ₹100 (8 shares)
 ₹100 (20 shares)        ₹104 (3 shares)
   ↑
-Best Buy
+Best Buy 🎯
 
-Match found: 105 ≥ 98 → Trade 5 shares at ₹98
+Match found: 105 ≥ 98 → Trade 5 shares at ₹98 ✅
 ```
 
-### Why Dual Heaps?
+### 📚 Why Dual Heaps?
 
 - **BUY side:** Max-heap → highest price buyer at O(1)
 - **SELL side:** Min-heap → lowest price seller at O(1)
-- Insert/delete: O(log n)
-- Traditional array: O(n log n) per insertion (too slow)
+- Insert/delete: O(log n) ⚡
+- Traditional array: O(n log n) per insertion (too slow) ❌
 
-### Execution Logic
+### 🔧 Execution Logic
 
 1. Peek top of both heaps
 2. If `buyPrice < sellPrice` → no match, stop
@@ -94,9 +94,9 @@ Match found: 105 ≥ 98 → Trade 5 shares at ₹98
 6. Fully filled orders are removed
 7. Repeat until no more matches
 
-## API Endpoints
+## 🔌 API Endpoints
 
-### Place an Order
+### 📤 Place an Order
 ```http
 POST /api/v1/orders
 Content-Type: application/json
@@ -108,7 +108,7 @@ Content-Type: application/json
 }
 ```
 
-**Response (if trade executes):**
+**Response (if trade executes):** ✅
 ```json
 [
   {
@@ -122,12 +122,12 @@ Content-Type: application/json
 ]
 ```
 
-**Response (if no match):**
+**Response (if no match):** ⏳
 ```json
 []
 ```
 
-### Get All Orders
+### 📥 Get All Orders
 ```http
 GET /api/v1/orders
 ```
@@ -154,7 +154,7 @@ GET /api/v1/orders
 ]
 ```
 
-### Get All Trades
+### 💹 Get All Trades
 ```http
 GET /api/v1/trades
 ```
@@ -173,12 +173,12 @@ GET /api/v1/trades
 ]
 ```
 
-## Validation
+## ✅ Validation
 
 Orders must satisfy:
-- `type`: BUY or SELL (enum validated)
-- `price`: positive number (> 0)
-- `quantity`: at least 1 share
+- `type`: BUY or SELL (enum validated) ✔️
+- `price`: positive number (> 0) 💰
+- `quantity`: at least 1 share 📊
 
 **Example of invalid request:**
 ```json
@@ -189,7 +189,7 @@ Orders must satisfy:
 }
 ```
 
-**Response (400 Bad Request):**
+**Response (400 Bad Request):** ❌
 ```json
 {
   "price": "must be greater than 0",
@@ -197,14 +197,14 @@ Orders must satisfy:
 }
 ```
 
-## Setup & Run
+## 🚀 Setup & Run
 
-### Prerequisites
-- Java 21+
-- MySQL 8.0+
-- Maven 3.8+
+### 📋 Prerequisites
+- ☕ Java 21+
+- 🗄️ MySQL 8.0+
+- 🛠️ Maven 3.8+
 
-### Installation
+### 📦 Installation
 
 1. **Clone the repo**
 ```bash
@@ -232,9 +232,9 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-The app starts on `http://localhost:8080`
+The app starts on `http://localhost:8080` 🎉
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 | Layer | Technology |
 |-------|------------|
@@ -247,70 +247,69 @@ The app starts on `http://localhost:8080`
 | **API** | REST with Spring Web |
 | **Validation** | Jakarta Validation |
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/main/java/com/trading/order_matching_engine/
-├── entity/
+├── entity/              📦
 │   ├── Order.java
 │   └── Trade.java
-├── repository/
+├── repository/          🗄️
 │   ├── OrderRepository.java
 │   └── TradeRepository.java
-├── service/
+├── service/             ⚙️
 │   └── OrderService.java
-├── engine/
+├── engine/              🔥
 │   ├── OrderBook.java
 │   └── MatchingEngine.java
-├── controller/
+├── controller/          🔌
 │   └── OrderController.java
-└── exception/
+└── exception/           🚨
     └── GlobalExceptionHandler.java
 ```
 
-## Design Decisions
+## 💭 Design Decisions
 
 ### Why PriorityQueue over sorted ArrayList?
-- **ArrayList:** Insert O(n log n), Find best O(1)
-- **PriorityQueue:** Insert O(log n), Find best O(1)
+- **ArrayList:** Insert O(n log n), Find best O(1) ❌
+- **PriorityQueue:** Insert O(log n), Find best O(1) ✅
 - For high-frequency trading, O(log n) vs O(n log n) is massive
 
 ### Why separate OrderBook from MatchingEngine?
-- **OrderBook:** Answers "what orders exist?"
-- **MatchingEngine:** Answers "can any be matched?"
+- **OrderBook:** Answers "what orders exist?" 📊
+- **MatchingEngine:** Answers "can any be matched?" 🔄
 - Single Responsibility Principle — each class does one thing well
 
 ### Why FILLED vs PARTIALLY_FILLED?
-- Enables partial execution (core exchange behavior)
-- Buyer wants 10, only 6 available → 6 trade, 4 remain in book
-- When next seller comes, remaining 4 can match
+- Enables partial execution (core exchange behavior) 📈
+- Buyer wants 10, only 6 available → 6 trade, 4 remain in book 🔄
+- When next seller comes, remaining 4 can match ✅
 
-## Interview Talking Points
+## 💬 Interview Talking Points
 
-**DSA:** "I chose PriorityQueue (max-heap for buys, min-heap for sells) to get O(1) best-price lookup with O(log n) inserts — the same approach real exchanges use."
+**DSA:** "I chose PriorityQueue (max-heap for buys, min-heap for sells) to get O(1) best-price lookup with O(log n) inserts — the same approach real exchanges use." 🏆
 
-**System Design:** "The OrderBook and MatchingEngine are decoupled by design. One manages state, the other executes matches. If I needed to add order cancellation or market orders, I can extend either independently."
+**System Design:** "The OrderBook and MatchingEngine are decoupled by design. One manages state, the other executes matches. If I needed to add order cancellation or market orders, I can extend either independently." 🎯
 
-**FinTech Domain:** "Price-time priority means if two buyers offer the same price, the one who placed first gets filled. I implemented that with a secondary comparator on `createdAt`."
+**FinTech Domain:** "Price-time priority means if two buyers offer the same price, the one who placed first gets filled. I implemented that with a secondary comparator on `createdAt`." 📅
 
-## Future Enhancements
+## 🚧 Future Enhancements
 
-- [ ] Order cancellation with cascade cleanup
-- [ ] Market orders (execute at any price)
-- [ ] Multiple instrument support (multiple order books)
-- [ ] WebSocket for real-time price feeds
-- [ ] Docker containerization for deployment
-- [ ] JUnit 5 test suite (matching algorithm unit tests)
+- [ ] 🚫 Order cancellation with cascade cleanup
+- [ ] 📊 Market orders (execute at any price)
+- [ ] 🔀 Multiple instrument support (multiple order books)
+- [ ] 📡 WebSocket for real-time price feeds
+- [ ] 🐳 Docker containerization for deployment
+- [ ] ✔️ JUnit 5 test suite (matching algorithm unit tests)
 
-## License
+## 📄 License
 
 MIT License
 
 ---
 
-## Author
+## 👨‍💻 Author
 
-**Janhavi Vaidya**
-- GitHub: [@janhavi1214](https://github.com/janhavi1214)
-- LinkedIn: [Janhavi Vaidya](https://linkedin.com/in/janhavi-vaidya)
-- Email: 1680.janhavi@gmail.com
+**Janhavi Vaidya** 🚀
+- GitHub: [@janhavi1214](https://github.com/janhavi1214) 
+- Email: 1680.janhavi@gmail.com 📧
