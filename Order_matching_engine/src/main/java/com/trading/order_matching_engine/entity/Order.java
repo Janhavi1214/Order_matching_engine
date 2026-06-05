@@ -1,6 +1,9 @@
 package com.trading.order_matching_engine.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 
@@ -14,12 +17,15 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NotNull
     private OrderType type;
 
     @Column(nullable = false)
+    @NotNull @Positive
     private Double price;
 
     @Column(nullable = false)
+    @NotNull @Min(1)
     private Integer quantity;
 
     @Enumerated(EnumType.STRING)

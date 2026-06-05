@@ -5,6 +5,7 @@ import com.trading.order_matching_engine.entity.Trade;
 import com.trading.order_matching_engine.repository.OrderRepository;
 import com.trading.order_matching_engine.repository.TradeRepository;
 import com.trading.order_matching_engine.service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping(value="/orders")
-    public List<Trade> save(@RequestBody Order ord){
+    public List<Trade> save(@Valid @RequestBody Order ord){
         List<Trade> saveOrder = orderService.placeOrder(ord);
         return saveOrder;
     }
