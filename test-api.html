@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        button { padding: 10px 20px; font-size: 16px; }
+        div { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        pre { background: #f4f4f4; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+<h1>Order Matching Engine - API Test</h1>
+
+<h2>Test 1: Get All Orders</h2>
+<button onclick="getOrders()">Click to Fetch Orders</button>
+<div id="ordersResult"></div>
+
+<h2>Test 2: Place an Order</h2>
+<form onsubmit="placeOrder(event)">
+    <label>Type:</label>
+    <select id="type">
+        <option>BUY</option>
+        <option>SELL</option>
+    </select>
+    <br><br>
+
+    <label>Price:</label>
+    <input type="number" id="price" step="0.01" required>
+    <br><br>
+
+    <label>Quantity:</label>
+    <input type="number" id="quantity" required>
+    <br><br>
+
+    <button type="submit">Place Order</button>
+</form>
+<div id="orderResult"></div>
+
+<h2>Test 3: Get All Trades</h2>
+<button onclick="getTrades()">Click to Fetch Trades</button>
+<div id="tradesResult"></div>
+
+<script>
+    // Test 1: Fetch all orders
+    async function getOrders() {
+        const resultDiv = document.getElementById('ordersResult');
+        resultDiv.innerHTML = '⏳ Loading...';
+
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/orders');
+            const orders = await response.json();
+            resultDiv.innerHTML = '<pre>' + JSON.stringify(orders, null, 2) + '</pre>';
+        } catch (error) {
+            resultDiv.innerHTML = '❌ Error: ' + error.message;
+        }
+    }
+
+    // Test 2: Place an order
+    async function placeOrder(event) {
+        event.preventDefault();
+
+        const resultDiv = document.getElementById('orderResult');
+        resultDiv.innerHTML = '⏳ Placing order...';
+
+        const type = document.getElementById('type').value;
+        const price = parseFloat(document.getElementById('price').value);
+        const quantity = parseInt(document.getElementById('quantity').value);
+
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ type, price, quantity })
+            });
+
+            const trades = await response.json();
+
+            if (trades.length === 0) {
+                resultDiv.innerHTML = '<pre>✅ Order placed!\nNo trades executed yet.\n' + JSON.stringify(trades, null, 2) + '</pre>';
+            } else {
+                resultDiv.innerHTML = '<pre>✅ Order placed!\nTrades executed:\n' + JSON.stringify(trades, null, 2) + '</pre>';
+            }
+        } catch (error) {
+            resultDiv.innerHTML = '❌ Error: ' + error.message;
+        }
+    }
+
+    // Test 3: Fetch all trades
+    async function getTrades() {
+        const resultDiv = document.getElementById('tradesResult');
+        resultDiv.innerHTML = '⏳ Loading...';
+
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/trades');
+            const trades = await response.json();
+            resultDiv.innerHTML = '<pre>' + JSON.stringify(trades, null, 2) + '</pre>';
+        } catch (error) {
+            resultDiv.innerHTML = '❌ Error: ' + error.message;
+        }
+    }
+</script>
+</body>
+</html>
